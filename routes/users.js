@@ -39,6 +39,7 @@ router.post('/signin', function(req, res, next) {
 
 });
 
+/*
 //Nickname 보내기
 router.post('/SendNickname', function(req, res, next) {
   var username = req.body.username;
@@ -57,10 +58,33 @@ router.post('/SendNickname', function(req, res, next) {
       }
     });
   }
+});
+*/
 
+//Nickname 보내기2
+router.post('/SendNickname', function(req, res, next) {
+  var username = req.body.username;
+
+  var database = req.app.get('database');
+  var users = database.collection('users');
+
+  if (username !== undefined && password !== undefined) 
+  {
+    users.findOne({ username: username }, function(err,result){
+      if(result){
+        if (username === result.username){
+          res.json({result:ResponseType.SUCCESS});   //'success');
+          res.send(nickname);
+        }else{
+          res.json( {result: ResponseType.INVALID_PASSWORD} );  //'failure');
+        }
+      } else{
+        res.json( {result: ResponseType.INVALID_USERNAME} );   //'failure');
+      }
+    });
+  }
 
 });
-
 
 
 
